@@ -92,17 +92,19 @@ namespace programowanie
                 w = 2;
                 return w;
             }
-            else if(l % 2 == 1)
-            {
-                w = Ciag(l - 1) * 2;
-                return w;
-            }
-            else
+            else if(l % 2 == 0)
             {
                 w = Ciag(l - 1) + 2;
                 return w;
             }
+            else
+            {
+                w = Ciag(l - 1) * 2;
+                return w;
+            }
         }
+		
+		
 
         static void Main(string[] args)
         {

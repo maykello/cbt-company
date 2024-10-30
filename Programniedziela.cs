@@ -1,185 +1,225 @@
-﻿using System;
+﻿using System.Data;
 
-namespace programowanie
+namespace cbt;
+
+class Program
 {
-    internal class Program
+    // liczby pierwsze
+    static void ZnajdzLiczbyPierwsze(int n)
     {
-        static int Silnia(int l)
+        for (int i = 2; i <= n; i++)
         {
-            if (l <= 1)
+            bool pierwsza = true;
+            for (int j = 2; j < i; j++)
             {
-                return 1;
+                if (i % j == 0)
+                {
+                    pierwsza = false;
+                    break;
+                }
             }
-            return l * Silnia(l - 1);
-        }
-     
-        static int Fibonacci(int l)
-        {
-            int w = 1;
-            if (l == 0)
+            if (pierwsza)
             {
-                w = 0;
-                return w;
-            }
-            else if (l == 1)
-            {
-                w = 1;
-                return w;
-            }
-            else
-            {
-                w = Fibonacci(l - 1) + Fibonacci(l - 2);
-                return w;
+                Console.WriteLine(i);
             }
         }
- 
+    }
 
-        static void Fibo(int l, Funkcje funkcje)
+    static bool CzyJestPierwsza(int n)
+    {
+        if (n <= 1) return false;
+        for (int j = 2; j <= Math.Sqrt(n); j++)
         {
-            if(funkcje == Funkcje.rekurencyjnie)
+            if (n % j == 0)
             {
-                static int Fibonacci(int l)
-                {
-                    int w = 1;
-                    if (l == 0)
-                    {
-                        w = 0;
-                        return w;
-                    }
-                    else if (l == 1)
-                    {
-                        w = 1;
-                        return w;
-                    }
-                    else
-                    {
-                        w = Fibonacci(l - 1) + Fibonacci(l - 2);
-                        return w;
-                    }
-                }
-            }
-            else if(funkcje == Funkcje.iteracyjnie)
-            {
-                int f0 = 0;
-                int f1 = 1;
-                int w = 0;
-
-                if (l == 0)
-                {
-                    w = 0;
-                }
-                else if (l == 1)
-                {
-                    w = 1;
-                }
-                else if (l > 1)
-                {
-                    for (int i = 2; i <= l; i++)
-                    {
-                        w = f0 + f1;
-                        f0 = f1;
-                        f1 = w;
-                    }
-                }
+                return false;
             }
         }
+        return true;
+    }
 
-        static int Ciag(int l)
+    static void NajblizszaLiczbaPierwsza(int n)
+    {
+        if (CzyJestPierwsza(n))
         {
-            int w = 1;
-            if(l==1)
+            Console.WriteLine("Najbliższa liczba pierwsza to " + n);
+            return;
+        }
+
+        int i = n - 1;
+        int j = n + 1;
+
+        while (true)
+        {
+            if (CzyJestPierwsza(i) && CzyJestPierwsza(j))
+            {
+                Console.WriteLine("Najbliższe liczby pierwsze to " + i + " i " + j);
+                break;
+            }
+            if (CzyJestPierwsza(i))
+            {
+                Console.WriteLine("Najbliższa liczba pierwsza to " + i);
+                break;
+            }
+            if (CzyJestPierwsza(j))
+            {
+                Console.WriteLine("Najbliższa liczba pierwsza to " + j);
+                break;
+            }
+            i--;
+            j++;
+        }
+    }
+
+
+
+    //Ciągi iteracyjne + rekurencyjne
+    static void CiagFibonacciegoIteracyjnie(int n)
+    {
+        int a = 0;
+        int b = 1;
+        for (int i = 1; i < n; i++)
+        {
+            int temp = a;
+            a = b;
+            b = temp + b;
+            Console.WriteLine(a);
+        }
+    }
+
+    static int Fibonacci(int n)
+    {
+        if (n <= 1)
+            return n;
+        return Fibonacci(n - 1) + Fibonacci(n - 2);
+    }
+
+    static void CiagFibonnaciegoRekurencyjnie(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine(Fibonacci(i));
+        }
+    }
+
+    static int Ciag(int l)
+    {
+        int w = 1;
+        if (l == 1)
+        {
+            w = 2;
+            Console.WriteLine(w);
+            return w;
+        }
+        else if (l % 2 == 0)
+        {
+            w = Ciag(l - 1) + 2;
+            Console.WriteLine(w);
+            return w;
+        }
+        else
+        {
+            w = Ciag(l - 1) * 2;
+            Console.WriteLine(w);
+            return w;
+        }
+    }
+
+    // iteracyjnie
+    static void ciagiter(int l)
+    {
+        int f0 = 1;
+        int w = 1;
+        for (int i = 1; i <= l; i++)
+        {
+            if (i == 1)
             {
                 w = 2;
-                return w;
             }
-            else if(l % 2 == 1)
+            else if (i % 2 == 0)
             {
-                w = Ciag(l - 1) * 2;
-                return w;
+                w += 2;
             }
             else
             {
-                w = Ciag(l - 1) + 2;
-                return w;
+                w *= 2;
+            }
+            Console.WriteLine("W = " + w);
+        }      
+    }
+
+
+
+    // pomyślenie = cbt
+
+
+    //tablice 2D
+    static int[,] GenerujTablice2D(int n, int m)
+    {
+        int[,] tablica = new int[n, m];
+        Random random = new Random();
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                tablica[i, j] = random.Next(10);
             }
         }
+        return tablica;
+    }
 
-        static void Main(string[] args)
+    static void WypiszTablice2D(int[,] tablica)
+    {
+        for (int i = 0; i < tablica.GetLength(0); i++)
         {
-            Console.WriteLine("Wprowadź liczbę");
-            int l = int.Parse(Console.ReadLine());
-            int w = 1;
-
-            if (l >= 1)
+            for (int j = 0; j < tablica.GetLength(1); j++)
             {
-                for (int i = 1; i < l + 1; i++)
-                {
-                    Console.Write(w + ", ");
-                    w *= i;
-                }
+                Console.Write(tablica[i, j] + " ");
             }
             Console.WriteLine();
-            Console.WriteLine("Silnia z " + l + " = " + w);
-            Console.WriteLine("Silnia rekurencyjnie z " + l + " = " + Silnia(l));
-
-            // Ciąg fibonacciego
-            Console.WriteLine("------------------");
-
-            int f0 = 0;
-            int f1 = 1;
-            w = 0;
-
-            if (l == 0)
-            {
-                w = 0;
-            }
-            else if (l == 1)
-            {
-                w = 1;
-            }
-            else if (l > 1)
-            {
-                for (int i = 2; i <= l; i++)
-                {
-                    w = f0 + f1;
-                    f0 = f1;
-                    f1 = w;
-                }
-            }
-            Console.WriteLine("Ciąg Fibonacciego iteracyjnie: " + w);
-            Console.WriteLine("Ciąg Fibonacciego rekruencyjnie: " + Fibonacci(l));
-
-            // Ciąg
-            Console.WriteLine("------------------");
-            f0 = 1;
-            w = 1;
-            for (int i = 1; i <= l; i++)
-            {
-                if (i == 1)
-                {
-                    w = 2;
-                }
-                else if (i % 2 == 1)
-                {
-                    w *= 2;
-                }
-                else
-                {
-                    w += 2;
-                }
-            }
-            Console.WriteLine("Ciąg iteracyjnie: " + w);
-            Console.WriteLine("Ciąg rekurencyjnie: " + Ciag(l));
-
-            Console.WriteLine("------------------------");
-            Fibo(l, Funkcje.rekurencyjnie);
-            Fibo(l, Funkcje.iteracyjnie);
         }
+    }
 
-        enum Funkcje
+    static int[,] IloczynMacierzy(int[,] a, int[,] b)
+    {
+        int[,] wynik = new int[a.GetLength(0), b.GetLength(1)];
+        for (int i = 0; i < a.GetLength(0); i++)
         {
-            iteracyjnie,
-            rekurencyjnie
+            for (int j = 0; j < b.GetLength(1); j++)
+            {
+                for (int k = 0; k < a.GetLength(1); k++)
+                {
+                    wynik[i, j] += a[i, k] * b[k, j];
+                }
+            }
         }
+        return wynik;
+    }
+
+    static void Main()
+    {
+        Console.WriteLine("Hello, World!");
+        ZnajdzLiczbyPierwsze(100);
+        CzyJestPierwsza(100);
+        CiagFibonacciegoIteracyjnie(10);
+        CiagFibonnaciegoRekurencyjnie(10);
+
+        Console.WriteLine("________________________");
+        ciagiter(11);
+        Console.WriteLine("________________________");
+        Ciag(11);
+        Console.WriteLine("________________________");
+
+        int[,] matrix = GenerujTablice2D(3, 3);
+        WypiszTablice2D(matrix);
+
+        int[,] matrix2 = GenerujTablice2D(3, 3);
+        WypiszTablice2D(matrix2);
+
+        int[,] wynik = IloczynMacierzy(matrix, matrix2);
+        WypiszTablice2D(wynik);
+
+        Console.WriteLine("--------------------------");
+        NajblizszaLiczbaPierwsza(100);
     }
 }
